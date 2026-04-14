@@ -1,0 +1,14 @@
+[project]
+name = "langchain-rag"
+version = "0.1.0"
+description = "Minimal local RAG lesson with LangChain"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "langchain",
+    "langchain-openai",
+    "python-dotenv",
+]
+
+[tool.uv]
+package = false

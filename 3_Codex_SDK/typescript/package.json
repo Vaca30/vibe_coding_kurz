@@ -1,0 +1,39 @@
+{
+  "name": "codex-examples",
+  "version": "1.0.0",
+  "description": "Comprehensive examples for OpenAI Codex SDK",
+  "type": "module",
+  "private": true,
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "example:1a": "tsx examples/1_single_thread/1a_simplest_thread.ts",
+    "example:1b": "tsx examples/1_single_thread/1b_simplest_streaming.ts",
+    "example:2a": "tsx examples/1_single_thread/2_thread_with_options.ts",
+    "example:2b": "tsx examples/1_single_thread/2b_thread_with_instructions.ts",
+    "example:3": "tsx examples/1_single_thread/3_structured_output.ts",
+    "example:4": "tsx examples/1_single_thread/4_thread_with_memory.ts",
+    "example:5": "tsx examples/1_single_thread/5_image_input.ts",
+    "example:6": "tsx examples/1_single_thread/6_mcp_tools.ts",
+    "example:collab": "tsx examples/2_multi_thread/1_collaboration_pattern.ts",
+    "example:super": "tsx examples/2_multi_thread/2_supervisor_pattern.ts",
+    "example:swarm": "tsx examples/2_multi_thread/3_swarm_pattern.ts",
+    "example:seq": "tsx examples/3_workflows/1_sequential_workflow.ts",
+    "example:par": "tsx examples/3_workflows/2_parallel_workflow.ts",
+    "example:cond": "tsx examples/3_workflows/3_conditional_workflow.ts",
+    "example:loop": "tsx examples/3_workflows/4_loop_workflow.ts"
+  },
+  "dependencies": {
+    "@openai/codex-sdk": "file:/home/lukas/Projects/Github/openai/codex/sdk/typescript",
+    "zod": "^3.24.2",
+    "zod-to-json-schema": "^3.24.6"
+  },
+  "devDependencies": {
+    "@types/node": "^20.19.18",
+    "tsx": "^4.19.2",
+    "typescript": "^5.9.2"
+  }
+}
