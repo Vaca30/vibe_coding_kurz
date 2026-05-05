@@ -1,0 +1,25 @@
+{
+  "mcpServers": {
+    "playwright": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp@latest"]
+    },
+    "excalidraw-canvas": {
+      "type": "stdio",
+      "command": "docker",
+      "args": ["exec", "-i", "mcp-excalidraw-canvas", "node", "dist/index.js"],
+      "env": {
+        "EXPRESS_SERVER_URL": "http://localhost:3000"
+      }
+    },
+    "tavily": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "tavily-mcp@latest"],
+      "env": {
+        "TAVILY_API_KEY": "${TAVILY_API_KEY}"
+      }
+    }
+  }
+}
