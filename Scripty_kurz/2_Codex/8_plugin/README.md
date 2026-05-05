@@ -1,1 +1,0 @@
-Is not possible to install without Marketplace !!!

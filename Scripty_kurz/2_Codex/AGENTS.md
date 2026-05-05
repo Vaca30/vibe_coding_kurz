@@ -1,1 +1,0 @@
-Never commit anything into `git`, unless you are asked to do it !!
