@@ -1,0 +1,9 @@
+[project]
+name = "ai-code-review-system"
+version = "0.1.0"
+description = "AI-powered multi-agent code review system using Claude Agent SDK"
+requires-python = ">=3.10"
+dependencies = [
+    "claude-agent-sdk>=0.1.53",
+    "anyio>=4.0.0",
+]
