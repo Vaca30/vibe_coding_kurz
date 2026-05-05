@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "companyAnnouncements": ["We are in 11_observability"],
+  "permissions": {
+    "allow": [
+      "Agent",
+      "Bash",
+      "Edit",
+      "ExitPlanMode",
+      "Glob",
+      "Grep",
+      "NotebookEdit",
+      "Read",
+      "Skill",
+      "TaskCreate",
+      "TaskGet",
+      "TaskList",
+      "TaskOutput",
+      "TaskStop",
+      "TaskUpdate",
+      "ToolSearch",
+      "WebFetch",
+      "WebSearch",
+      "Write"
+    ],
+    "deny": [
+      "Bash(rm -rf /)",
+      "Bash(rm -rf ~)",
+      "Bash(rm -rf /*)",
+      "Bash(rm -rf ~/)",
+      "Bash(rm -r -f /)",
+      "Bash(rm -r -f ~)",
+      "Bash(rm -r -f /*)",
+      "Bash(rm -r -f ~/)",
+      "Bash(sudo rm -rf /)",
+      "Bash(sudo rm -rf ~)",
+      "Bash(sudo rm -rf /*)",
+      "Bash(sudo rm -rf ~/)"
+    ]
+  },
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/.venv/bin/python ./.claude/hooks/langfuse_hook.py"
+          }
+        ]
+      }
+    ]
+  },
+  "env": {
+    "TRACE_TO_LANGFUSE": "true",
+    "LANGFUSE_PUBLIC_KEY": "pk-lf-fbe57c94-94ad-4877-9824-f1b8d9d7c860",
+    "LANGFUSE_SECRET_KEY": "${LANGFUSE_SECRET_KEY}",
+    "LANGFUSE_BASE_URL": "http://localhost:3000"
+  }
+}

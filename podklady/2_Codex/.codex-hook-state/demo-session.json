@@ -1,0 +1,12 @@
+{
+  "turns": {
+    "turn-001": {
+      "commands": [
+        "pytest tests/test_hooks.py",
+        "pytest tests/test_hooks.py"
+      ],
+      "last_validation_command": "pytest tests/test_hooks.py",
+      "validated_fingerprint": "802c6fee2c466d9543581c8049d0bd6c28515e46cc7c1481e4688361e358a769"
+    }
+  }
+}

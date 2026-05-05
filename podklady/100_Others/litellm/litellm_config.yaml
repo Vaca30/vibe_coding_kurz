@@ -1,0 +1,102 @@
+
+# litellm_config.yaml
+general_settings:
+  store_model_in_db: true
+  store_prompts_in_spend_logs: true
+  enable_responses_api: true # because of openai codex
+  drop_params: true # because of claude code 
+
+litellm_settings:
+  drop_params: true # because of claude code
+  num_retries: 3
+  disable_cooldowns: true # cooldown makes no sense with a single deployment
+
+model_list:
+    # vLLM Models (with proper tool/function calling support)
+  # Running on RunPod - replace RUNPOD_POD_ID with your actual pod ID
+  - model_name: runpod-qwen-35-35B
+    litellm_params:
+      model: hosted_vllm/Qwen/Qwen3.5-35B-A3B-GPTQ-Int4
+      api_base: https://v4thm4unvhcgjq-8000.proxy.runpod.net/v1
+      api_key: none
+  # vLLM in runpod
+  # - model_name: claude-sonnet-4-20250514
+  #   litellm_params:
+  #     model: hosted_vllm/Qwen/Qwen3.5-35B-A3B-GPTQ-Int4
+  #     api_base: https://v4thm4unvhcgjq-8000.proxy.runpod.net/v1
+  #     api_key: none
+  # SGLang in runpod (FP8, 2x H100)
+  # - model_name: "claude-sonnet-4-20250514"
+  #   litellm_params:
+  #     model: hosted_vllm/qwen3-coder-next
+  #     api_base: https://c3gowk008hh6hz-30000.proxy.runpod.net
+  # - model_name: "claude-opus-4-20250514"
+  #   litellm_params:
+  #     model: hosted_vllm/qwen3-coder-next
+  #     api_base: https://c3gowk008hh6hz-30000.proxy.runpod.net
+  # - model_name: "claude-haiku-4-20250514"
+  #   litellm_params:
+  #     model: hosted_vllm/qwen3-coder-next
+  #     api_base: https://c3gowk008hh6hz-30000.proxy.runpod.net
+  # vLLM in runpod - Qwen3-Coder-Next AWQ 4-bit (1x A100 80GB, $1.19/hr)
+  - model_name: "claude-sonnet-4-20250514"
+    litellm_params:
+      model: hosted_vllm/bullpoint/Qwen3-Coder-Next-AWQ-4bit
+      api_base: https://a3p42xn1hwkwsi-8000.proxy.runpod.net/v1
+      api_key: none
+  - model_name: "claude-opus-4-20250514"
+    litellm_params:
+      model: hosted_vllm/bullpoint/Qwen3-Coder-Next-AWQ-4bit
+      api_base: https://a3p42xn1hwkwsi-8000.proxy.runpod.net/v1
+      api_key: none
+  - model_name: "claude-haiku-4-20250514"
+    litellm_params:
+      model: hosted_vllm/bullpoint/Qwen3-Coder-Next-AWQ-4bit
+      api_base: https://a3p42xn1hwkwsi-8000.proxy.runpod.net/v1
+      api_key: none
+  # Local vLLM Models
+  - model_name: local-qwen-9b
+    litellm_params:
+      model: hosted_vllm/Qwen/Qwen3.5-9B
+      api_base: http://127.0.0.1:8002/v1
+      api_key: none
+  - model_name: local-nemotron-nano-4b
+    litellm_params:
+      model: hosted_vllm/nvidia/NVIDIA-Nemotron-3-Nano-4B-BF16
+      api_base: http://127.0.0.1:8003/v1
+      api_key: none
+  # Open Router
+  - model_name: "or_qwen3-coder-free"
+    litellm_params:
+      model: "openrouter/qwen/qwen3-coder:free"
+      api_key: "os.environ/OPENROUTER_API_KEY"
+  - model_name: "or_qwen3-coder"
+    litellm_params:
+      model: "openrouter/qwen/qwen3-coder"
+      api_key: "os.environ/OPENROUTER_API_KEY"
+      extra_body:
+        provider:
+          order: ["deepinfra/turbo"]
+          allow_fallbacks: false
+  - model_name: "or_mimo-v2-pro"
+    litellm_params:
+      model: "openrouter/xiaomi/mimo-v2-pro"
+      api_key: "os.environ/OPENROUTER_API_KEY"
+  - model_name: "or_deepseek-v3.2"
+    litellm_params:
+      model: "openrouter/deepseek/deepseek-v3.2"
+      api_key: "os.environ/OPENROUTER_API_KEY"
+  - model_name: "or_step-3.5-flash"
+    litellm_params:
+      model: "openrouter/stepfun/step-3.5-flash"
+      api_key: "os.environ/OPENROUTER_API_KEY"
+  # LMStudio
+  - model_name: lms-gpt-oss-20b
+    litellm_params:
+      model: lm_studio/openai/gpt-oss-20b
+      api_base: http://localhost:1234/v1
+  - model_name: lms-qwen3.5-9b
+    litellm_params:
+      model: lm_studio/qwen/qwen3.5-9b
+      api_base: http://localhost:1234/v1
+  

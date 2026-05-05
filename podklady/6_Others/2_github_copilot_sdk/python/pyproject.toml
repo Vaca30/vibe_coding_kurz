@@ -1,0 +1,22 @@
+[project]
+name = "copilot-sdk-tutorial"
+version = "0.1.0"
+description = "Tutorial examples for the GitHub Copilot SDK (Python)"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+
+dependencies = [
+    "github-copilot-sdk>=0.1.0",
+    "pydantic>=2.0",
+]
+
+[project.optional-dependencies]
+finance = ["yfinance>=0.2.40"]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+py-modules = []

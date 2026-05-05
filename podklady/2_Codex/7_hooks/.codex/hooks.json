@@ -1,0 +1,68 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$PWD/.codex/hooks/session_start_context.py\"",
+            "statusMessage": "Loading hook context"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$PWD/.codex/hooks/user_prompt_secret_guard.py\"",
+            "statusMessage": "Scanning prompt for secrets"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$PWD/.codex/hooks/pre_tool_git_guardian.py\"",
+            "statusMessage": "Checking Bash command"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$PWD/.codex/hooks/post_tool_audit_logger.py\"",
+            "statusMessage": "Writing audit log"
+          },
+          {
+            "type": "command",
+            "command": "python3 \"$PWD/.codex/hooks/post_tool_validation_tracker.py\"",
+            "statusMessage": "Tracking validation state"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$PWD/.codex/hooks/stop_validation_guardian.py\"",
+            "statusMessage": "Checking validation coverage",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

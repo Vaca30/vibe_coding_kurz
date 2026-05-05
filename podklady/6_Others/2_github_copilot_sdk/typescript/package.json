@@ -1,0 +1,22 @@
+{
+    "name": "copilot-sdk-tutorial",
+    "version": "0.1.0",
+    "description": "Tutorial examples for the GitHub Copilot SDK (TypeScript)",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "build": "tsc",
+        "run": "tsx",
+        "0a": "tsx src/1_single_agent/0a_simplest_agent.ts",
+        "0b": "tsx src/1_single_agent/0b_simplest_agent.ts"
+    },
+    "dependencies": {
+        "@github/copilot-sdk": "^0.1.8",
+        "zod": "^3.23.8"
+    },
+    "devDependencies": {
+        "@types/node": "^22.0.0",
+        "tsx": "^4.19.0",
+        "typescript": "^5.6.0"
+    }
+}

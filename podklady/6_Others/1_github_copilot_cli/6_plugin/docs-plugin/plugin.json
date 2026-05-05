@@ -1,0 +1,14 @@
+{
+  "name": "docs-plugin",
+  "version": "1.0.0",
+  "description": "Documentation automation — generates, audits, and keeps docs in sync with code. Includes parallel agent orchestration, API reference generation, and automated docstring checking.",
+  "author": {
+    "name": "Lukas Kellerstein",
+    "email": "lukas.kellerstein@gmail.com"
+  },
+  "license": "MIT",
+  "keywords": ["documentation", "docs", "api-reference", "docstrings", "code-quality"],
+  "agents": "agents",
+  "skills": "skills",
+  "hooks": "hooks.json"
+}

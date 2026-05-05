@@ -1,0 +1,33 @@
+{
+  "name": "vibe-coding-marketplace",
+  "owner": {
+    "name": "Lukas Kellerstein",
+    "url": "https://github.com/lukaskellerstein"
+  },
+  "metadata": {
+    "description": "Plugin marketplace for the Vibe Coding Course — demonstrates how to distribute Claude Code plugins",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "docs-plugin",
+      "source": "./plugins/docs-plugin",
+      "description": "Documentation automation — generates, audits, and keeps docs in sync with code. Includes parallel agent orchestration, API reference generation, and automated docstring checking.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Lukas Kellerstein"
+      },
+      "keywords": ["documentation", "docs", "api-reference", "docstrings", "code-quality"]
+    },
+    {
+      "name": "dev-tools-plugin",
+      "source": "./plugins/dev-tools-plugin",
+      "description": "General developer tooling — git workflows, code hygiene, and dependency management.",
+      "version": "1.1.0",
+      "author": {
+        "name": "Lukas Kellerstein"
+      },
+      "keywords": ["git", "pr", "dead-code", "dependencies", "cleanup"]
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "models": [
+    {
+      "slug": "QuantTrio/Qwen3.5-9B-AWQ",
+      "display_name": "Qwen3.5-9B-AWQ",
+      "description": "Qwen3.5-9B AWQ quantized local model",
+      "support_verbosity": false,
+      "default_verbosity": "low",
+      "apply_patch_tool_type": "freeform",
+      "input_modalities": ["text"],
+      "supports_image_detail_original": false,
+      "truncation_policy": {
+        "mode": "tokens",
+        "limit": 1000
+      },
+      "supports_parallel_tool_calls": false,
+      "context_window": 8192,
+      "reasoning_summary_format": "none",
+      "default_reasoning_summary": "none",
+      "default_reasoning_level": "none",
+      "supported_reasoning_levels": [],
+      "shell_type": "shell_command",
+      "visibility": "list",
+      "minimal_client_version": "0.98.0",
+      "supported_in_api": true,
+      "availability_nux": null,
+      "upgrade": null,
+      "priority": 0,
+      "base_instructions": "You are a helpful coding assistant. You help the user with software engineering tasks. Be concise.",
+      "model_messages": {
+        "instructions_template": "You are a helpful coding assistant.\n\n{{ personality }}",
+        "instructions_variables": {
+          "personality_default": "",
+          "personality_friendly": "",
+          "personality_pragmatic": ""
+        }
+      },
+      "supports_reasoning_summaries": false,
+      "experimental_supported_tools": [],
+      "supports_search_tool": false,
+      "auto_compact_token_limit": 4000
+    }
+  ]
+}

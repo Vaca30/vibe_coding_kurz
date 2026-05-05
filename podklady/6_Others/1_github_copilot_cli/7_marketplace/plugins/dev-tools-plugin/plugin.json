@@ -1,0 +1,13 @@
+{
+  "name": "dev-tools-plugin",
+  "version": "1.0.0",
+  "description": "General developer tooling — git workflows, code hygiene, and dependency management.",
+  "author": {
+    "name": "Lukas Kellerstein",
+    "email": "lukas.kellerstein@gmail.com"
+  },
+  "license": "MIT",
+  "keywords": ["git", "pr", "pull-request", "dead-code", "dependencies", "cleanup"],
+  "agents": "agents",
+  "skills": "skills"
+}

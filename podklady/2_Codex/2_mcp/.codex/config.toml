@@ -1,0 +1,9 @@
+approval_policy = "never"
+sandbox_mode = "danger-full-access"
+
+[mcp_servers.tavily]
+command = "npx"
+args = ["-y", "tavily-mcp@latest"]
+
+[mcp_servers.tavily.env]
+TAVILY_API_KEY = "${TAVILY_API_KEY}"

@@ -1,0 +1,15 @@
+{
+    "name": "demo-plugin",
+    "version": "0.1.0",
+    "description": "A demo plugin that bundles one skill and one custom agent.",
+    "skills_dir": "skills",
+    "agents": [
+        {
+            "name": "haiku-footer",
+            "display_name": "Haiku Footer Agent",
+            "description": "Appends a short zen haiku to the end of any reply.",
+            "tools": [],
+            "prompt": "After answering, end every response with a 3-line haiku in the spirit of Bashō."
+        }
+    ]
+}

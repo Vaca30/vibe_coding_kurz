@@ -1,0 +1,24 @@
+approval_policy = "never"
+sandbox_mode = "danger-full-access"
+
+model_provider = "my-vllm-server"
+model = "QuantTrio/Qwen3.5-9B-AWQ"
+model_context_window = 8192
+model_catalog_json = "/home/lukas/Projects/Github/lukaskellerstein/vibe-coding-course/2_Codex/4_custom_models/.codex/model_catalog.json"
+
+[model_providers.my-vllm-server]
+name = "vllm-server"
+base_url = "http://localhost:8000/v1"
+wire_api = "responses"
+
+# MCP servers disabled — tool definitions exceed model context length on 16GB GPU
+# [mcp_servers.tavily]
+# command = "npx"
+# args = ["-y", "tavily-mcp@latest"]
+#
+# [mcp_servers.tavily.env]
+# TAVILY_API_KEY = "${TAVILY_API_KEY}"
+
+# Disable global playwright MCP — too many tool tokens for local model
+[mcp_servers.playwright]
+enabled = false

@@ -1,0 +1,5 @@
+# Cloned marketplace repo (pulled at runtime)
+marketplace/
+
+# Generated output files
+output/

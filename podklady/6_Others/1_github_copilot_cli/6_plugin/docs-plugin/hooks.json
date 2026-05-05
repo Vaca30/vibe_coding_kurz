@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "hooks": {
+    "preToolUse": [
+      {
+        "type": "command",
+        "bash": "bash ${COPILOT_PLUGIN_ROOT}/scripts/docs_companion_check.sh",
+        "powershell": "powershell -ExecutionPolicy Bypass -File ${COPILOT_PLUGIN_ROOT}/scripts/docs_companion_check.ps1",
+        "timeoutSec": 5
+      }
+    ],
+    "postToolUse": [
+      {
+        "type": "command",
+        "bash": "bash ${COPILOT_PLUGIN_ROOT}/scripts/docs_sync_check.sh",
+        "powershell": "powershell -ExecutionPolicy Bypass -File ${COPILOT_PLUGIN_ROOT}/scripts/docs_sync_check.ps1",
+        "timeoutSec": 10
+      }
+    ],
+    "sessionEnd": [
+      {
+        "type": "command",
+        "bash": "bash ${COPILOT_PLUGIN_ROOT}/scripts/docs_session_summary.sh",
+        "powershell": "powershell -ExecutionPolicy Bypass -File ${COPILOT_PLUGIN_ROOT}/scripts/docs_session_summary.ps1",
+        "timeoutSec": 5
+      }
+    ]
+  }
+}
