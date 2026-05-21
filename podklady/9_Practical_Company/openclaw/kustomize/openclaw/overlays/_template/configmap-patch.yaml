@@ -1,0 +1,38 @@
+# Patch applied only when this instance is publicly exposed (see kustomization.yaml).
+# Switches the gateway bind from "loopback" to "any" so traffic from the Service
+# (and therefore Traefik) can reach the gateway. Without this, the gateway only
+# accepts connections from 127.0.0.1 inside the pod's network namespace and the
+# IngressRoute will hit a closed port.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: openclaw-config
+data:
+  openclaw.json: |
+    {
+      "gateway": {
+        "mode": "local",
+        "bind": "any",
+        "port": 18789,
+        "auth": {
+          "mode": "token"
+        },
+        "controlUi": {
+          "enabled": true,
+          "origins": ["https://OPENCLAW_INSTANCE-claw.cellarwood.org"]
+        }
+      },
+      "agents": {
+        "defaults": {
+          "workspace": "~/.openclaw/workspace"
+        },
+        "list": [
+          {
+            "id": "default",
+            "name": "OpenClaw Assistant",
+            "workspace": "~/.openclaw/workspace"
+          }
+        ]
+      },
+      "cron": { "enabled": false }
+    }

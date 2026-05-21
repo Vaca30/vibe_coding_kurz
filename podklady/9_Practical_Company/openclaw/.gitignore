@@ -1,0 +1,18 @@
+node_modules
+dist
+.vite
+
+.playwright-mcp
+
+
+# Dex runtime cache — local only, never committed
+.dex/state.json
+.dex/state.lock
+.dex/variant-groups/
+.dex/worktrees/
+
+# Populated Secret manifests — Secrets are created imperatively via `kubectl create secret`.
+# Only `secret.example.yaml` (with placeholder values) belongs in git.
+**/secret.yaml
+**/secret.local.yaml
+**/secrets.local.yaml

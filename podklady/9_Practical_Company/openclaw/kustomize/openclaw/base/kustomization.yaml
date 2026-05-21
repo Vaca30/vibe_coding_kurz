@@ -1,0 +1,66 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# Vendored from https://github.com/openclaw/openclaw/tree/main/scripts/k8s/manifests
+# Refresh: see ../README.md (Refreshing the vendored base).
+
+resources:
+  - pvc.yaml
+  - configmap.yaml
+  - deployment.yaml
+  - service.yaml
+
+# Track upstream `:latest`. Upstream deployment.yaml references `:slim`, which is
+# currently a 404 on ghcr.io — `:latest` is the most up-to-date moving tag.
+# Pair with the imagePullPolicy patch below so the kubelet actually re-pulls on
+# pod restart (upstream sets IfNotPresent, which defeats `:latest`).
+images:
+  - name: ghcr.io/openclaw/openclaw
+    newTag: latest
+
+patches:
+  # Combined Deployment patch:
+  # - imagePullPolicy: Always so `:latest` is re-pulled on pod restart
+  # - init container `cp -n` (no-clobber) so the PVC's openclaw.json survives
+  #   pod recreates; the ConfigMap is now a one-time seed rather than a per-boot
+  #   reset. Required for any runtime-written state (OAuth profiles, channel
+  #   configs, agent overrides) to be durable.
+  # - SLACK_APP_TOKEN / SLACK_BOT_TOKEN env vars surfaced from openclaw-secrets,
+  #   both `optional: true`; populate the Secret keys per-instance to activate
+  #   Slack via Socket Mode. Same pattern as upstream's API-key env vars.
+  - target:
+      kind: Deployment
+      name: openclaw
+    patch: |-
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: openclaw
+      spec:
+        template:
+          spec:
+            initContainers:
+              - name: init-config
+                command:
+                  - sh
+                  - -c
+                  - |
+                    cp -n /config/openclaw.json /home/node/.openclaw/openclaw.json
+                    mkdir -p /home/node/.openclaw/workspace
+                    cp -n /config/AGENTS.md /home/node/.openclaw/workspace/AGENTS.md
+            containers:
+              - name: gateway
+                imagePullPolicy: Always
+                env:
+                  - name: SLACK_APP_TOKEN
+                    valueFrom:
+                      secretKeyRef:
+                        name: openclaw-secrets
+                        key: SLACK_APP_TOKEN
+                        optional: true
+                  - name: SLACK_BOT_TOKEN
+                    valueFrom:
+                      secretKeyRef:
+                        name: openclaw-secrets
+                        key: SLACK_BOT_TOKEN
+                        optional: true

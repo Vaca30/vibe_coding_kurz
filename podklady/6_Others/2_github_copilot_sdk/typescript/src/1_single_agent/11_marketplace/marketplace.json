@@ -1,0 +1,12 @@
+{
+    "$schema": "https://example.com/copilot-marketplace.schema.json",
+    "name": "demo-marketplace",
+    "description": "A toy plugin index — in real use, this lives in a separate Git repo.",
+    "plugins": [
+        {
+            "name": "geocities-html",
+            "description": "Forces 1990s Geocities-style HTML output.",
+            "source": "../10_plugins/demo-plugin"
+        }
+    ]
+}

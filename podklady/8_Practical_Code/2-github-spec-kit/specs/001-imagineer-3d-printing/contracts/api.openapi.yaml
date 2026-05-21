@@ -1,0 +1,545 @@
+openapi: 3.1.0
+info:
+  title: Imagineer Customer API
+  version: 0.1.0
+  description: |
+    Customer-facing REST API for the Imagineer 3D-printing platform. All endpoints
+    are JSON-over-HTTPS. Authentication is cookie-based (Auth.js session) for
+    customer endpoints; admin endpoints require an additional role claim.
+
+    This contract covers Phase 1 of the spec (User Stories 1, 2, 3) plus the
+    operator-facing admin surface needed to fulfil orders.
+
+servers:
+  - url: https://imagineer.example.com/api
+    description: Production
+  - url: http://localhost:3000/api
+    description: Local dev
+
+tags:
+  - name: Generation
+    description: Submit and poll AI 3D generation jobs.
+  - name: Models
+    description: Read generated models and approve them for ordering.
+  - name: Catalog
+    description: Browse materials and colors.
+  - name: Orders
+    description: Create orders, start checkout, view order history.
+  - name: Address
+    description: Validate shipping addresses before checkout.
+  - name: Webhooks
+    description: Inbound webhooks from Stripe, Shippo, and the generation provider.
+  - name: Admin
+    description: Operator-only endpoints for the print queue and content moderation.
+
+paths:
+  /generations:
+    post:
+      tags: [Generation]
+      summary: Submit a generation job
+      description: |
+        Enqueues a generation job. Accepts either a text prompt or a previously
+        uploaded image reference. Runs the content-policy pre-check synchronously
+        and returns 422 if the input is refused before reaching the provider.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/TextGenerationInput'
+                - $ref: '#/components/schemas/ImageGenerationInput'
+      responses:
+        '202':
+          description: Accepted; poll the returned job for status.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/GenerationJob' }
+        '422':
+          description: Content-policy refusal.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/PolicyRefusal' }
+
+  /generations/{id}:
+    get:
+      tags: [Generation]
+      summary: Poll a generation job
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200':
+          description: Current status of the job.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/GenerationJob' }
+        '404': { description: Not found. }
+
+  /generations/{id}/regenerate:
+    post:
+      tags: [Generation]
+      summary: Regenerate from the same input
+      description: |
+        Creates a new GenerationJob with the same input as the referenced job.
+        Returns 402 if the customer has exceeded the free-regeneration quota for
+        the session and a paid regeneration was not confirmed in the request.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                accept_paid_regeneration:
+                  type: boolean
+                  default: false
+      responses:
+        '202':
+          description: Accepted.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/GenerationJob' }
+        '402':
+          description: Payment required for additional regeneration.
+
+  /uploads/image:
+    post:
+      tags: [Generation]
+      summary: Upload a reference image
+      description: |
+        Returns a signed R2 upload URL plus the resulting `image_uri` to use in
+        a subsequent `POST /generations` call.
+      responses:
+        '200':
+          description: Signed upload URL issued.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [image_uri, upload_url, expires_at]
+                properties:
+                  image_uri: { type: string }
+                  upload_url: { type: string, format: uri }
+                  expires_at: { type: string, format: date-time }
+
+  /models/{id}:
+    get:
+      tags: [Models]
+      summary: Read a model
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200':
+          description: Model metadata + signed GLB / thumbnail URLs.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Model' }
+
+  /models/{id}/approve:
+    post:
+      tags: [Models]
+      summary: Approve a model as the basis for an order
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200':
+          description: Model approved; returns the model with `approved_at` set.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Model' }
+
+  /catalog/materials:
+    get:
+      tags: [Catalog]
+      summary: List materials with prices and colors for a given model
+      parameters:
+        - name: model_id
+          in: query
+          required: true
+          description: |
+            Required. Pricing and lead-time vary per model based on volume and
+            print-readiness verdict.
+          schema: { type: string, format: uuid }
+      responses:
+        '200':
+          description: Materials with per-material pricing for this model.
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/MaterialOption' }
+
+  /addresses/validate:
+    post:
+      tags: [Address]
+      summary: Validate a US shipping address
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/AddressInput' }
+      responses:
+        '200':
+          description: Validation result.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/AddressValidation' }
+
+  /orders:
+    post:
+      tags: [Orders]
+      summary: Draft an order from an approved model
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/OrderDraft' }
+      responses:
+        '201':
+          description: Draft order created.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Order' }
+
+  /orders/{id}/checkout:
+    post:
+      tags: [Orders]
+      summary: Start a Stripe Checkout session for the order
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200':
+          description: Checkout URL the customer is redirected to.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [checkout_url, expires_at]
+                properties:
+                  checkout_url: { type: string, format: uri }
+                  expires_at: { type: string, format: date-time }
+
+  /orders/{id}:
+    get:
+      tags: [Orders]
+      summary: Read an order
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      responses:
+        '200':
+          description: Order with current status, payment, and shipment.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Order' }
+
+  /orders:
+    get:
+      tags: [Orders]
+      summary: List the authenticated customer's orders
+      responses:
+        '200':
+          description: Most recent first.
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Order' }
+
+  /orders/{id}/reprint-request:
+    post:
+      tags: [Orders]
+      summary: Request a reprint for a delivered order
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [reason]
+              properties:
+                reason: { type: string, maxLength: 1000 }
+      responses:
+        '202':
+          description: Request received; operator review queued.
+
+  /webhooks/stripe:
+    post:
+      tags: [Webhooks]
+      summary: Inbound Stripe webhook
+      description: |
+        Signature verified via `Stripe-Signature` header. Handles
+        `payment_intent.succeeded`, `payment_intent.payment_failed`,
+        `checkout.session.expired`. All processing is idempotent on the event id.
+      responses:
+        '200': { description: Acknowledged. }
+
+  /webhooks/shippo:
+    post:
+      tags: [Webhooks]
+      summary: Inbound Shippo tracking webhook
+      responses:
+        '200': { description: Acknowledged. }
+
+  /webhooks/generation:
+    post:
+      tags: [Webhooks]
+      summary: Inbound generation-provider completion webhook
+      responses:
+        '200': { description: Acknowledged. }
+
+  /admin/queue:
+    get:
+      tags: [Admin]
+      summary: List orders currently in production
+      security: [ { sessionAuth: [], adminRole: [] } ]
+      responses:
+        '200':
+          description: Print-queue snapshot for operators.
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/QueuedOrder' }
+
+  /admin/orders/{id}/print-failed:
+    post:
+      tags: [Admin]
+      summary: Operator marks a print as failed; system schedules a free reprint
+      security: [ { sessionAuth: [], adminRole: [] } ]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string, format: uuid }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [reason]
+              properties:
+                reason: { type: string, maxLength: 500 }
+      responses:
+        '200':
+          description: Reprint scheduled.
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Order' }
+
+  /admin/policy/decisions:
+    get:
+      tags: [Admin]
+      summary: Recent content-policy refusals for review
+      security: [ { sessionAuth: [], adminRole: [] } ]
+      responses:
+        '200':
+          description: Page of policy decisions.
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/PolicyDecision' }
+
+components:
+  securitySchemes:
+    sessionAuth:
+      type: apiKey
+      in: cookie
+      name: imagineer_session
+    adminRole:
+      type: apiKey
+      in: cookie
+      name: imagineer_session
+      description: Same cookie; route guards check for `role: operator` claim.
+
+  schemas:
+    TextGenerationInput:
+      type: object
+      required: [kind, prompt]
+      properties:
+        kind: { type: string, enum: [text] }
+        prompt: { type: string, minLength: 3, maxLength: 500 }
+
+    ImageGenerationInput:
+      type: object
+      required: [kind, image_uri]
+      properties:
+        kind: { type: string, enum: [image] }
+        image_uri: { type: string, description: R2 URI returned by /uploads/image }
+        hint: { type: string, maxLength: 500, description: Optional clarifying text. }
+
+    GenerationJob:
+      type: object
+      required: [id, status, submitted_at]
+      properties:
+        id: { type: string, format: uuid }
+        status:
+          type: string
+          enum: [queued, running, succeeded, refused, failed]
+        submitted_at: { type: string, format: date-time }
+        completed_at: { type: string, format: date-time, nullable: true }
+        model:
+          $ref: '#/components/schemas/Model'
+          nullable: true
+          description: Present when `status = succeeded`.
+        failure_reason: { type: string, nullable: true }
+
+    Model:
+      type: object
+      required: [id, glb_uri, thumbnail_uri, bounding_box_mm]
+      properties:
+        id: { type: string, format: uuid }
+        glb_uri: { type: string, format: uri }
+        thumbnail_uri: { type: string, format: uri }
+        bounding_box_mm:
+          type: object
+          required: [x, y, z]
+          properties:
+            x: { type: number }
+            y: { type: number }
+            z: { type: number }
+        approved_at: { type: string, format: date-time, nullable: true }
+
+    MaterialOption:
+      type: object
+      required: [id, slug, display_name, description, colors, price_cents, lead_time_days, is_available]
+      properties:
+        id: { type: string, format: uuid }
+        slug: { type: string }
+        display_name: { type: string }
+        description: { type: string }
+        colors:
+          type: array
+          items:
+            type: object
+            required: [id, slug, display_name, hex, is_available]
+            properties:
+              id: { type: string, format: uuid }
+              slug: { type: string }
+              display_name: { type: string }
+              hex: { type: string }
+              is_available: { type: boolean }
+        price_cents: { type: integer, minimum: 0 }
+        lead_time_days: { type: integer, minimum: 0 }
+        is_available: { type: boolean }
+        unavailable_reason: { type: string, nullable: true }
+        restock_estimated_at: { type: string, format: date, nullable: true }
+
+    AddressInput:
+      type: object
+      required: [recipient_name, street1, city, state, postal_code]
+      properties:
+        recipient_name: { type: string }
+        street1: { type: string }
+        street2: { type: string, nullable: true }
+        city: { type: string }
+        state: { type: string, minLength: 2, maxLength: 2 }
+        postal_code: { type: string }
+
+    AddressValidation:
+      type: object
+      required: [is_deliverable, dpv_match_code]
+      properties:
+        is_deliverable: { type: boolean }
+        dpv_match_code: { type: string, enum: [Y, S, D, N] }
+        normalized:
+          $ref: '#/components/schemas/AddressInput'
+          nullable: true
+        explanation: { type: string, nullable: true }
+
+    OrderDraft:
+      type: object
+      required: [model_id, material_id, color_id, address]
+      properties:
+        model_id: { type: string, format: uuid }
+        material_id: { type: string, format: uuid }
+        color_id: { type: string, format: uuid }
+        address: { $ref: '#/components/schemas/AddressInput' }
+
+    Order:
+      type: object
+      required: [id, status, total_cents, currency, estimated_delivery_at]
+      properties:
+        id: { type: string, format: uuid }
+        status:
+          type: string
+          enum: [draft, awaiting_payment, paid, in_production, reprint, shipped, delivered, reprint_requested, cancelled]
+        subtotal_cents: { type: integer }
+        shipping_cents: { type: integer }
+        tax_cents: { type: integer }
+        total_cents: { type: integer }
+        currency: { type: string }
+        estimated_delivery_at: { type: string, format: date }
+        placed_at: { type: string, format: date-time }
+        paid_at: { type: string, format: date-time, nullable: true }
+        shipped_at: { type: string, format: date-time, nullable: true }
+        delivered_at: { type: string, format: date-time, nullable: true }
+        model: { $ref: '#/components/schemas/Model' }
+        material: { $ref: '#/components/schemas/MaterialOption' }
+        shipment: { $ref: '#/components/schemas/Shipment', nullable: true }
+
+    Shipment:
+      type: object
+      required: [carrier, service_level, tracking_number, tracking_url]
+      properties:
+        carrier: { type: string }
+        service_level: { type: string }
+        tracking_number: { type: string }
+        tracking_url: { type: string, format: uri }
+        dispatched_at: { type: string, format: date-time, nullable: true }
+        delivered_at: { type: string, format: date-time, nullable: true }
+
+    PolicyRefusal:
+      type: object
+      required: [rule_id, customer_message]
+      properties:
+        rule_id: { type: string }
+        customer_message: { type: string }
+
+    PolicyDecision:
+      allOf:
+        - $ref: '#/components/schemas/PolicyRefusal'
+        - type: object
+          required: [id, generation_job_id, stage, created_at]
+          properties:
+            id: { type: string, format: uuid }
+            generation_job_id: { type: string, format: uuid }
+            stage: { type: string, enum: [pre_check, post_check] }
+            created_at: { type: string, format: date-time }
+
+    QueuedOrder:
+      type: object
+      required: [order_id, material_slug, color_slug, queued_at]
+      properties:
+        order_id: { type: string, format: uuid }
+        material_slug: { type: string }
+        color_slug: { type: string }
+        queued_at: { type: string, format: date-time }
+        stl_uri: { type: string, format: uri }
+        estimated_print_seconds: { type: integer }

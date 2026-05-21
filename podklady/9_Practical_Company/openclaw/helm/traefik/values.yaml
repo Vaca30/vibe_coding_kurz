@@ -1,0 +1,54 @@
+# Traefik Helm Values
+# Ingress controller for cellarwood server (microk8s-wood cluster)
+
+service:
+  enabled: true
+  type: NodePort
+
+ports:
+  web:
+    port: 8000
+    expose:
+      default: true
+    exposedPort: 80
+    nodePort: 30080
+  websecure:
+    port: 8443
+    expose:
+      default: true
+    exposedPort: 443
+    nodePort: 30443
+
+ingressClass:
+  enabled: true
+  isDefaultClass: true
+
+# Enable Traefik dashboard
+api:
+  dashboard: true
+  insecure: true
+
+# Logging
+logs:
+  general:
+    level: INFO
+  access:
+    enabled: true
+
+# Resource limits
+resources:
+  requests:
+    cpu: "100m"
+    memory: "64Mi"
+  limits:
+    cpu: "500m"
+    memory: "256Mi"
+
+# Additional arguments
+additionalArguments:
+  - "--providers.kubernetesingress.allowexternalnameservices=true"
+  - "--providers.kubernetescrd.allowexternalnameservices=true"
+  - "--providers.kubernetescrd.allowCrossNamespace=true"
+  # Trust forwarded headers from Cloudflare Tunnel
+  - "--entryPoints.web.forwardedHeaders.insecure=true"
+  - "--entryPoints.websecure.forwardedHeaders.insecure=true"

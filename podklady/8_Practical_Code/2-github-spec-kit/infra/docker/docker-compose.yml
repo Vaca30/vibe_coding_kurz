@@ -1,0 +1,61 @@
+services:
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: imagineer
+      POSTGRES_PASSWORD: imagineer
+      POSTGRES_DB: imagineer
+    ports: ['5432:5432']
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U imagineer']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7
+    ports: ['6379:6379']
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 5s
+
+  minio:
+    image: minio/minio:latest
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: imagineer
+      MINIO_ROOT_PASSWORD: imagineer
+    ports:
+      - '9000:9000'
+      - '9001:9001'
+    volumes:
+      - minio_data:/data
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:9000/minio/health/ready']
+      interval: 5s
+
+  minio-init:
+    image: minio/mc:latest
+    depends_on:
+      minio: { condition: service_healthy }
+    entrypoint: >
+      /bin/sh -c "
+      mc alias set local http://minio:9000 imagineer imagineer;
+      mc mb -p local/imagineer-uploads;
+      mc mb -p local/imagineer-models;
+      mc mb -p local/imagineer-thumbnails;
+      mc anonymous set download local/imagineer-models;
+      mc anonymous set download local/imagineer-thumbnails;
+      "
+
+  mock-generation:
+    build: ../mocks/generation
+    ports: ['8787:8787']
+    environment:
+      MOCK_DELAY_MS: 3000
+
+volumes:
+  postgres_data:
+  minio_data:

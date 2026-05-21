@@ -1,0 +1,5 @@
+github-copilot-sdk>=0.1.0
+pydantic>=2.0
+
+[finance]
+yfinance>=0.2.40

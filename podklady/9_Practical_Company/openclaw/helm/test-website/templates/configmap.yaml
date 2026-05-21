@@ -1,0 +1,45 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "test-website.fullname" . }}
+  labels:
+    {{- include "test-website.labels" . | nindent 4 }}
+data:
+  index.html: |
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Cellarwood - Test</title>
+      <style>
+        body {
+          font-family: system-ui, -apple-system, sans-serif;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          min-height: 100vh;
+          margin: 0;
+          background: #0f172a;
+          color: #e2e8f0;
+        }
+        .card {
+          text-align: center;
+          padding: 3rem;
+          border-radius: 1rem;
+          background: #1e293b;
+          box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
+        }
+        h1 { color: #38bdf8; margin-bottom: 0.5rem; }
+        .status { color: #4ade80; font-size: 1.2rem; }
+        .meta { color: #94a3b8; margin-top: 1.5rem; font-size: 0.85rem; }
+      </style>
+    </head>
+    <body>
+      <div class="card">
+        <h1>Cellarwood</h1>
+        <p class="status">Infrastructure is running.</p>
+        <p class="meta">Host: {{ .Values.ingress.host }}</p>
+      </div>
+    </body>
+    </html>

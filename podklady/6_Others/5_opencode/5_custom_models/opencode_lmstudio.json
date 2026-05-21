@@ -1,0 +1,33 @@
+{
+    "$schema": "https://opencode.ai/config.json",
+    "provider": {
+        "lmstudio": {
+            "npm": "@ai-sdk/openai-compatible",
+            "name": "LMStudio",
+            "options": {
+                "baseURL": "http://localhost:1234/v1"
+            },
+            "models": {
+                "openai/gpt-oss-20b": {
+                    "name": "GPT-OSS 20B"
+                },
+                "qwen/qwen3.5-9b": {
+                    "name": "Qwen3.5 9B"
+                }
+            }
+        }
+    },
+    "mcp": {
+        "tavily": {
+            "type": "local",
+            "command": [
+                "npx",
+                "-y",
+                "tavily-mcp@latest"
+            ],
+            "environment": {
+                "TAVILY_API_KEY": "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"
+            }
+        }
+    }
+}

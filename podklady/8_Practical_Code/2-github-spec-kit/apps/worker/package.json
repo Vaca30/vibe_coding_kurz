@@ -1,0 +1,27 @@
+{
+  "name": "@imagineer/worker",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "start": "tsx src/index.ts",
+    "typecheck": "tsc --noEmit",
+    "test:unit": "vitest run --passWithNoTests"
+  },
+  "dependencies": {
+    "@imagineer/config": "workspace:*",
+    "@imagineer/db": "workspace:*",
+    "@imagineer/domain": "workspace:*",
+    "@imagineer/providers": "workspace:*",
+    "@imagineer/shared": "workspace:*",
+    "bullmq": "5.28.0",
+    "drizzle-orm": "0.36.4",
+    "ioredis": "5.4.1"
+  },
+  "devDependencies": {
+    "tsx": "4.19.2",
+    "typescript": "5.5.4",
+    "vitest": "2.1.4"
+  }
+}

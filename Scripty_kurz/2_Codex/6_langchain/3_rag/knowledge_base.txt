@@ -1,7 +1,0 @@
-Course block 8_plugin is focused on building Codex plugins. A plugin directory must include a .codex-plugin/plugin.json file. Optional folders such as hooks, scripts, or skills can be added after the required plugin manifest exists.
-
-Course block 3_skills explains how to create and install reusable skills. A skill is documented in a SKILL.md file and can include references, scripts, and templates.
-
-Course block 4_subagents explains how to delegate work to specialized agents. It is useful when you want to split a coding task into parallel, well-scoped workers.
-
-Course block 11_observability discusses monitoring and debugging agent behavior. It is useful after the first version of an application is already running.

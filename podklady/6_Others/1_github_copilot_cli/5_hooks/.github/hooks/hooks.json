@@ -1,0 +1,54 @@
+{
+  "version": 1,
+  "hooks": {
+    "sessionStart": [
+      {
+        "type": "command",
+        "bash": "bash .github/hooks/scripts/session_start.sh",
+        "powershell": "powershell -ExecutionPolicy Bypass -File .github/hooks/scripts/session_start.ps1",
+        "timeoutSec": 5
+      }
+    ],
+    "sessionEnd": [
+      {
+        "type": "command",
+        "bash": "bash .github/hooks/scripts/session_end.sh",
+        "powershell": "powershell -ExecutionPolicy Bypass -File .github/hooks/scripts/session_end.ps1",
+        "timeoutSec": 5
+      }
+    ],
+    "userPromptSubmitted": [
+      {
+        "type": "command",
+        "bash": "bash .github/hooks/scripts/log_prompt.sh",
+        "powershell": "powershell -ExecutionPolicy Bypass -File .github/hooks/scripts/log_prompt.ps1",
+        "timeoutSec": 5,
+        "env": { "LOG_LEVEL": "INFO" }
+      }
+    ],
+    "preToolUse": [
+      {
+        "type": "command",
+        "bash": "bash .github/hooks/scripts/git_guardian.sh",
+        "powershell": "powershell -ExecutionPolicy Bypass -File .github/hooks/scripts/git_guardian.ps1",
+        "timeoutSec": 5
+      }
+    ],
+    "postToolUse": [
+      {
+        "type": "command",
+        "bash": "bash .github/hooks/scripts/format_python.sh",
+        "powershell": "powershell -ExecutionPolicy Bypass -File .github/hooks/scripts/format_python.ps1",
+        "timeoutSec": 15
+      }
+    ],
+    "errorOccurred": [
+      {
+        "type": "command",
+        "bash": "bash .github/hooks/scripts/notify_error.sh",
+        "powershell": "powershell -ExecutionPolicy Bypass -File .github/hooks/scripts/notify_error.ps1",
+        "timeoutSec": 5
+      }
+    ]
+  }
+}

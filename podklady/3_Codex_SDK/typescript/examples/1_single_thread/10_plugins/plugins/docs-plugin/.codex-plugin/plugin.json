@@ -1,0 +1,35 @@
+{
+  "name": "docs-plugin",
+  "version": "0.1.0",
+  "description": "Documentation workflow plugin for Codex with audit, generation, and API reference skills.",
+  "author": {
+    "name": "Lukas Kellerstein"
+  },
+  "license": "UNLICENSED",
+  "keywords": [
+    "documentation",
+    "codex",
+    "skills",
+    "api"
+  ],
+  "skills": "./skills/",
+  "hooks": "./hooks/hooks.json",
+  "interface": {
+    "displayName": "Docs Plugin",
+    "shortDescription": "Audit, generate, and maintain project documentation.",
+    "longDescription": "Ports the Claude Code docs-plugin into a Codex plugin with reusable documentation skills and a lightweight finishing reminder hook.",
+    "developerName": "Lukas Kellerstein",
+    "category": "Productivity",
+    "capabilities": [
+      "Read",
+      "Write",
+      "Interactive"
+    ],
+    "defaultPrompt": [
+      "Audit this repo for missing or stale documentation.",
+      "Generate docs for the undocumented public interfaces in this project.",
+      "Create an API reference for the endpoints in this codebase."
+    ],
+    "brandColor": "#2563EB"
+  }
+}

@@ -1,0 +1,17 @@
+node_modules/
+dist/
+build/
+.next/
+.turbo/
+coverage/
+playwright-report/
+test-results/
+.env
+.env.local
+.env.*.local
+*.log
+.DS_Store
+.vercel/
+.fly/
+.specify/feature.json
+infra/mocks/generation/*.glb.tmp

@@ -1,0 +1,24 @@
+{
+  "name": "@imagineer/providers",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test:unit": "vitest run --passWithNoTests"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "3.687.0",
+    "@aws-sdk/s3-request-presigner": "3.687.0",
+    "@imagineer/config": "workspace:*",
+    "@imagineer/shared": "workspace:*",
+    "resend": "4.0.1",
+    "stripe": "17.4.0"
+  },
+  "devDependencies": {
+    "typescript": "5.5.4",
+    "vitest": "2.1.4"
+  }
+}

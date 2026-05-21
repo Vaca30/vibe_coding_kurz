@@ -1,0 +1,27 @@
+{
+  "mcpServers": {
+    "tavily": {
+      "type": "local",
+      "command": "npx",
+      "args": ["-y", "tavily-mcp@latest"],
+      "env": {
+        "TAVILY_API_KEY": "${TAVILY_API_KEY}"
+      },
+      "tools": ["*"]
+    },
+    "playwright": {
+      "type": "local",
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp@latest"],
+      "tools": ["*"]
+    },
+    "context7": {
+      "type": "http",
+      "url": "https://mcp.context7.com/mcp",
+      "headers": {
+        "Authorization": "Bearer ${CONTEXT7_API_KEY}"
+      },
+      "tools": ["resolve-library-id", "get-library-docs"]
+    }
+  }
+}

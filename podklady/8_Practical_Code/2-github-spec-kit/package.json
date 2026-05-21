@@ -1,0 +1,40 @@
+{
+  "name": "imagineer",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@10.33.0",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev --parallel",
+    "lint": "biome check .",
+    "format": "biome format --write .",
+    "typecheck": "turbo run typecheck",
+    "test:unit": "turbo run test:unit",
+    "test:e2e": "pnpm --filter @imagineer/web test:e2e",
+    "infra:up": "docker compose -f infra/docker/docker-compose.yml up -d",
+    "infra:down": "docker compose -f infra/docker/docker-compose.yml down"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.9.4",
+    "@types/node": "22.9.0",
+    "lefthook": "1.7.18",
+    "turbo": "2.5.4",
+    "typescript": "5.5.4"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@biomejs/biome",
+      "esbuild",
+      "lefthook"
+    ],
+    "overrides": {
+      "react": "18.3.1",
+      "react-dom": "18.3.1",
+      "@types/react": "18.3.12",
+      "drizzle-orm": "0.36.4"
+    }
+  }
+}

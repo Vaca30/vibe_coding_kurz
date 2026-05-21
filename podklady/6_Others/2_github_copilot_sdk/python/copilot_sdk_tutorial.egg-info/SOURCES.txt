@@ -1,0 +1,7 @@
+README.md
+pyproject.toml
+copilot_sdk_tutorial.egg-info/PKG-INFO
+copilot_sdk_tutorial.egg-info/SOURCES.txt
+copilot_sdk_tutorial.egg-info/dependency_links.txt
+copilot_sdk_tutorial.egg-info/requires.txt
+copilot_sdk_tutorial.egg-info/top_level.txt

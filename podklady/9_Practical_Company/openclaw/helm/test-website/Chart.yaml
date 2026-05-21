@@ -1,0 +1,6 @@
+apiVersion: v2
+name: test-website
+description: Simple test website to verify Cellarwood infrastructure
+type: application
+version: 1.0.0
+appVersion: "1.0.0"
