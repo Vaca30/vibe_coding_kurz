@@ -88,8 +88,8 @@ Works, with mistakes, but main painpoint is limited context size.
 ```json
 "env": {
     "ANTHROPIC_BASE_URL": "http://localhost:4000",
-    "ANTHROPIC_API_KEY": "sk-Y1H-Ak3g_slhJ4B4Qv5rdQ",
-    "ANTHROPIC_AUTH_TOKEN": "sk-Y1H-Ak3g_slhJ4B4Qv5rdQ",
+    "ANTHROPIC_API_KEY": "${ANTHROPIC_API_KEY}",
+    "ANTHROPIC_AUTH_TOKEN": "${ANTHROPIC_API_KEY}",
     "ANTHROPIC_DEFAULT_SONNET_MODEL": "local-qwen3.5-9b",
     "ANTHROPIC_DEFAULT_OPUS_MODEL": "local-qwen3.5-9b",
     "ANTHROPIC_DEFAULT_HAIKU_MODEL": "local-qwen3.5-9b",
@@ -109,8 +109,8 @@ Works, with mistakes, but main painpoint is limited context size.
 ```json
 "env": {
     "ANTHROPIC_BASE_URL": "http://localhost:4000",
-    "ANTHROPIC_API_KEY": "sk-Y1H-Ak3g_slhJ4B4Qv5rdQ",
-    "ANTHROPIC_AUTH_TOKEN": "sk-Y1H-Ak3g_slhJ4B4Qv5rdQ",
+    "ANTHROPIC_API_KEY": "${ANTHROPIC_API_KEY}",
+    "ANTHROPIC_AUTH_TOKEN": "${ANTHROPIC_API_KEY}",
     "ANTHROPIC_DEFAULT_SONNET_MODEL": "lms-gpt-oss-20b",
     "ANTHROPIC_DEFAULT_OPUS_MODEL": "lms-gpt-oss-20b",
     "ANTHROPIC_DEFAULT_HAIKU_MODEL": "lms-gpt-oss-20b",
@@ -126,8 +126,8 @@ Works, with mistakes, but main painpoint is limited context size.
 ```json
 "env": {
     "ANTHROPIC_BASE_URL": "http://localhost:4000",
-    "ANTHROPIC_API_KEY": "sk-Y1H-Ak3g_slhJ4B4Qv5rdQ",
-    "ANTHROPIC_AUTH_TOKEN": "sk-Y1H-Ak3g_slhJ4B4Qv5rdQ",
+    "ANTHROPIC_API_KEY": "${ANTHROPIC_API_KEY}",
+    "ANTHROPIC_AUTH_TOKEN": "${ANTHROPIC_API_KEY}",
     "ANTHROPIC_DEFAULT_SONNET_MODEL": "lms-qwen3.5-9b",
     "ANTHROPIC_DEFAULT_OPUS_MODEL": "lms-qwen3.5-9b",
     "ANTHROPIC_DEFAULT_HAIKU_MODEL": "lms-qwen3.5-9b",
@@ -149,8 +149,8 @@ Run on A100 80GB PCIe - 1.3$/hr
 ```json
 "env": {
     "ANTHROPIC_BASE_URL": "http://localhost:4000",
-    "ANTHROPIC_API_KEY": "sk-Y1H-Ak3g_slhJ4B4Qv5rdQ",
-    "ANTHROPIC_AUTH_TOKEN": "sk-Y1H-Ak3g_slhJ4B4Qv5rdQ",
+    "ANTHROPIC_API_KEY": "${ANTHROPIC_API_KEY}",
+    "ANTHROPIC_AUTH_TOKEN": "${ANTHROPIC_API_KEY}",
     "ANTHROPIC_DEFAULT_SONNET_MODEL": "claude-sonnet-4-20250514",
     "ANTHROPIC_DEFAULT_OPUS_MODEL": "claude-opus-4-20250514",
     "ANTHROPIC_DEFAULT_HAIKU_MODEL": "claude-haiku-4-20250514",
@@ -171,8 +171,8 @@ Works, not perfect though.
 
 "env": {
     "ANTHROPIC_BASE_URL": "http://localhost:4000",
-    "ANTHROPIC_API_KEY": "sk-Y1H-Ak3g_slhJ4B4Qv5rdQ",
-    "ANTHROPIC_AUTH_TOKEN": "sk-Y1H-Ak3g_slhJ4B4Qv5rdQ",
+    "ANTHROPIC_API_KEY": "${ANTHROPIC_API_KEY}",
+    "ANTHROPIC_AUTH_TOKEN": "${ANTHROPIC_API_KEY}",
     "ANTHROPIC_DEFAULT_SONNET_MODEL": "qwen3-coder",
     "ANTHROPIC_DEFAULT_OPUS_MODEL": "qwen3-coder",
     "ANTHROPIC_DEFAULT_HAIKU_MODEL": "qwen3-coder",

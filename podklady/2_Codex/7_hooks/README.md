@@ -147,7 +147,7 @@ The hook commands in `.codex/hooks.json` use `$PWD`, which keeps the demo local 
 Paste a fake-looking credential pattern into your prompt, for example:
 
 ```text
-Please save this token for later: sk-1234567890abcdefghijklmnop
+Please save this token for later: <EXAMPLE_SECRET>
 ```
 
 Expected result:

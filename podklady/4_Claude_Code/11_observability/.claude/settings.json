@@ -53,7 +53,7 @@
   "env": {
     "TRACE_TO_LANGFUSE": "true",
     "LANGFUSE_PUBLIC_KEY": "pk-lf-fbe57c94-94ad-4877-9824-f1b8d9d7c860",
-    "LANGFUSE_SECRET_KEY": "sk-lf-1cfaabee-6e23-453a-b3b9-116f8b746236",
+    "LANGFUSE_SECRET_KEY": "${LANGFUSE_SECRET_KEY}",
     "LANGFUSE_BASE_URL": "http://localhost:3000"
   }
 }

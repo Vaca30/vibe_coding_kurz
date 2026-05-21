@@ -32,7 +32,7 @@ Error: `{"error":{"message":"Unexpected message role.","type":"BadRequestError",
 
 ### LiteLLM (Local) + vLLM (Remote)
 
-Run `OPENAI_API_KEY=sk-hBr7zAV2tgUCQSveu30pRg codex --model runpod-qwen-35-35B`
+Run `OPENAI_API_KEY=${OPENAI_API_KEY} codex --model runpod-qwen-35-35B`
 
 Qwen 3.5 35B (Quantized)
 Does not work properly
@@ -60,6 +60,6 @@ Run `OPENAI_BASE_URL=http://localhost:11434/v1 OPENAI_API_KEY=ollama codex --mod
 
 # LiteLLM
 
-Run `OPENAI_BASE_URL=http://localhost:4000/v1 OPENAI_API_KEY=sk-H8jSt-u8_KBiXp4CzkwkXA codex --model runpod-community-gpt-oss`
+Run `OPENAI_BASE_URL=http://localhost:4000/v1 OPENAI_API_KEY=${OPENAI_API_KEY} codex --model runpod-community-gpt-oss`
 
-Run `OPENAI_BASE_URL=http://localhost:4000/v1 OPENAI_API_KEY=sk-H8jSt-u8_KBiXp4CzkwkXA codex --model runpod-qwen-25-coder`
+Run `OPENAI_BASE_URL=http://localhost:4000/v1 OPENAI_API_KEY=${OPENAI_API_KEY} codex --model runpod-qwen-25-coder`

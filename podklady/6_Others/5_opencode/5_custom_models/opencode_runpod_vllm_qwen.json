@@ -23,7 +23,7 @@
                 "tavily-mcp@latest"
             ],
             "environment": {
-                "TAVILY_API_KEY": "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"
+                "TAVILY_API_KEY": "${TAVILY_API_KEY}"
             }
         }
     }
